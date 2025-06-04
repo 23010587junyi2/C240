@@ -8,11 +8,43 @@ document.addEventListener('DOMContentLoaded', () => {
 // Main initialization function
 function initializeApp() {
     console.log('ShoreSquad App Initialized');
-    setupEventListeners();
-    // These will be implemented later:
+    setupEventListeners();    // Initialize core features
     // initMap();
-    // initWeatherData();
+    initWeatherData();
     // initializeUserSystem();
+}
+
+// Weather utility functions
+function formatTemperature(temp) {
+    // Ensure temperature is in Celsius
+    return `${Math.round(temp)}°C`;
+}
+
+async function initWeatherData() {
+    try {
+        const weatherContainer = document.querySelector('.weather-container');
+        if (!weatherContainer) return;
+
+        // Placeholder weather data structure (will be replaced with API data)
+        const weatherData = {
+            temperature: 28, // Already in Celsius
+            humidity: 75,    // Percentage
+            windSpeed: 15,   // km/h
+            conditions: 'Partly Cloudy'
+        };
+
+        weatherContainer.innerHTML = `
+            <div class="weather-card">
+                <h3>Current Conditions</h3>
+                <p class="temperature">${formatTemperature(weatherData.temperature)}</p>
+                <p>Humidity: ${weatherData.humidity}%</p>
+                <p>Wind Speed: ${weatherData.windSpeed} km/h</p>
+                <p>${weatherData.conditions}</p>
+            </div>
+        `;
+    } catch (error) {
+        handleError(error, 'Weather Data Initialization');
+    }
 }
 
 // Set up event listeners

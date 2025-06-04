@@ -177,6 +177,31 @@ body {
     margin-top: 2rem;
 }
 
+.weather-card {
+    background-color: var(--color-white);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.weather-card h3 {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.weather-card .temperature {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin: 1rem 0;
+}
+
+.weather-card p {
+    margin: 0.5rem 0;
+    color: var(--color-dark);
+}
+
 /* Footer */
 footer {
     background-color: var(--color-dark);
