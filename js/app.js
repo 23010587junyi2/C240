@@ -15,9 +15,26 @@ function initializeApp() {
 }
 
 // Weather utility functions
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-SG', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
 function formatTemperature(temp) {
     // Ensure temperature is in Celsius
     return `${Math.round(temp)}°C`;
+}
+
+async function fetchWeatherForecast() {
+    const today = new Date().toISOString().split('T')[0];
+    const url = `https://api.data.gov.sg/v1/environment/4-day-weather-forecast?date=${today}`;
+    
+    try {
+        const response = await fetchData(url);
+        return response.items[0].forecasts;
+    } catch (error) {
+        throw new Error('Failed to fetch weather forecast: ' + error.message);
+    }
 }
 
 async function initWeatherData() {
@@ -25,23 +42,24 @@ async function initWeatherData() {
         const weatherContainer = document.querySelector('.weather-container');
         if (!weatherContainer) return;
 
-        // Placeholder weather data structure (will be replaced with API data)
-        const weatherData = {
-            temperature: 28, // Already in Celsius
-            humidity: 75,    // Percentage
-            windSpeed: 15,   // km/h
-            conditions: 'Partly Cloudy'
-        };
-
-        weatherContainer.innerHTML = `
+        const forecasts = await fetchWeatherForecast();
+        
+        const forecastsHTML = forecasts.map(forecast => `
             <div class="weather-card">
-                <h3>Current Conditions</h3>
-                <p class="temperature">${formatTemperature(weatherData.temperature)}</p>
-                <p>Humidity: ${weatherData.humidity}%</p>
-                <p>Wind Speed: ${weatherData.windSpeed} km/h</p>
-                <p>${weatherData.conditions}</p>
+                <h3>${formatDate(forecast.date)}</h3>
+                <div class="weather-icon">
+                    <span class="material-icons">${getWeatherIcon(forecast.forecast)}</span>
+                </div>
+                <p class="temperature">
+                    ${formatTemperature(forecast.temperature.low)} - ${formatTemperature(forecast.temperature.high)}
+                </p>
+                <p class="forecast-text">${forecast.forecast}</p>
+                <p class="humidity">Relative Humidity: ${forecast.relative_humidity.low}% - ${forecast.relative_humidity.high}%</p>
+                <p class="wind">Wind: ${forecast.wind.speed.low} - ${forecast.wind.speed.high} km/h</p>
             </div>
-        `;
+        `).join('');
+
+        weatherContainer.innerHTML = forecastsHTML;
     } catch (error) {
         handleError(error, 'Weather Data Initialization');
     }
@@ -84,6 +102,18 @@ async function fetchData(url, options = {}) {
         console.error('Error fetching data:', error);
         throw error;
     }
+}
+
+// Weather icon mapping
+function getWeatherIcon(forecast) {
+    const lowercaseForecast = forecast.toLowerCase();
+    if (lowercaseForecast.includes('thundery')) return 'thunderstorm';
+    if (lowercaseForecast.includes('rain')) return 'rainy';
+    if (lowercaseForecast.includes('cloudy')) return 'cloud';
+    if (lowercaseForecast.includes('sunny')) return 'wb_sunny';
+    if (lowercaseForecast.includes('fair')) return 'wb_sunny';
+    if (lowercaseForecast.includes('windy')) return 'air';
+    return 'wb_sunny'; // default icon
 }
 
 // Error handling utility

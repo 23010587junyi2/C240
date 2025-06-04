@@ -170,6 +170,15 @@ body {
     padding: 4rem 2rem;
 }
 
+.weather-subtitle {
+    text-align: center;
+    color: var(--color-dark);
+    opacity: 0.7;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+
 .weather-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -183,23 +192,48 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.weather-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .weather-card h3 {
     color: var(--color-primary);
     margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.weather-icon {
+    margin: 1rem 0;
+}
+
+.weather-icon .material-icons {
+    font-size: 3rem;
+    color: var(--color-primary);
 }
 
 .weather-card .temperature {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
     color: var(--color-dark);
     margin: 1rem 0;
 }
 
-.weather-card p {
+.weather-card .forecast-text {
+    color: var(--color-primary);
+    font-weight: 500;
     margin: 0.5rem 0;
+}
+
+.weather-card .humidity,
+.weather-card .wind {
+    font-size: 0.9rem;
     color: var(--color-dark);
+    margin: 0.5rem 0;
+    opacity: 0.8;
 }
 
 /* Footer */
